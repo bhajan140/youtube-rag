@@ -43,22 +43,11 @@ def get_transcript(url):
     """
     Fetches the full transcript of a YouTube video.
     Returns:
-      - transcript: a list of segments (each with text + start time)
-      - video_id: the 11-character video ID (used later for timestamps)
+      - transcript: list of segments (each with text + start time)
+      - video_id: the 11-character video ID
     """
     video_id = extract_video_id(url)
-    
-    # New API (v1.0+): create an instance, then call .fetch()
-    api = YouTubeTranscriptApi()
-    fetched = api.fetch(video_id)
-    
-    # The new API returns a FetchedTranscript object
-    # We convert it to the old-style list of dicts for our chunking code
-    transcript = [
-        {"text": snippet.text, "start": snippet.start, "duration": snippet.duration}
-        for snippet in fetched
-    ]
-    
+    transcript = YouTubeTranscriptApi.get_transcript(video_id)
     return transcript, video_id
 # ============================================================
 # JOB 2: CHUNK THE TRANSCRIPT (preserving timestamps)
